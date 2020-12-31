@@ -1,3 +1,9 @@
+# Changes: Prefab support
+Only for Unity `2020.1.1f1` onwards.
+```json
+"com.unity.2d.tilemap.extras": "https://github.com/alexmalyutindev/2d-extras.git#prefab-support"
+```
+
 # Notice
 
 ## No more development on 2d-extras GitHub repository
