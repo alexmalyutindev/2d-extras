@@ -737,14 +737,26 @@ namespace UnityEditor
         {
             if (m_PreviewUtility == null)
                 CreatePreview();
+            
+            if (Event.current.type == EventType.ScrollWheel)
+            {
+                var delta = 1 + Mathf.Sign(Event.current.delta.y) * 0.05f;
+                m_PreviewUtility.camera.transform.position *= delta;
+                Repaint();
+            }
+
+            if (Event.current.type == EventType.MouseDrag)
+            {
+                Transform cameraTransform = m_PreviewUtility.camera.transform;
+                cameraTransform.RotateAround(Vector3.zero, Vector3.up, Event.current.delta.x * 0.5f);
+                cameraTransform.RotateAround(Vector3.zero,  cameraTransform.right, Event.current.delta.y * 0.5f);
+                Repaint();
+            }
 
             if (Event.current.type != EventType.Repaint)
                 return;
-
+            
             m_PreviewUtility.BeginPreview(rect, background);
-            m_PreviewUtility.camera.orthographicSize = 2;
-            if (rect.height > rect.width)
-                m_PreviewUtility.camera.orthographicSize *= (float)rect.height / rect.width;
             m_PreviewUtility.camera.Render();
             m_PreviewUtility.EndAndDrawPreview(rect);
         }
@@ -755,18 +767,21 @@ namespace UnityEditor
         protected virtual void CreatePreview()
         {
             m_PreviewUtility = new PreviewRenderUtility(true);
-            m_PreviewUtility.camera.orthographic = true;
-            m_PreviewUtility.camera.orthographicSize = 2;
-            m_PreviewUtility.camera.transform.position = new Vector3(0, 0, -10);
+            m_PreviewUtility.lights[0].transform.rotation = Quaternion.Euler(45, -45, 0);
+            
+            m_PreviewUtility.camera.farClipPlane = 100;
+            m_PreviewUtility.camera.transform.position = new Vector3(-1, 1, -1) * 20f;
+            m_PreviewUtility.camera.transform.LookAt(Vector3.zero);
 
             var previewInstance = new GameObject();
             m_PreviewGrid = previewInstance.AddComponent<Grid>();
+            m_PreviewGrid.cellSwizzle = GridLayout.CellSwizzle.XZY;
             m_PreviewUtility.AddSingleGO(previewInstance);
 
             m_PreviewTilemaps = new List<Tilemap>();
             m_PreviewTilemapRenderers = new List<TilemapRenderer>();
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 1; i++)
             {
                 var previewTilemapGo = new GameObject();
                 m_PreviewTilemaps.Add(previewTilemapGo.AddComponent<Tilemap>());
@@ -774,18 +789,9 @@ namespace UnityEditor
 
                 previewTilemapGo.transform.SetParent(previewInstance.transform, false);
             }
-
-            for (int x = -2; x <= 0; x++)
-                for (int y = -1; y <= 1; y++)
+            for (int x = -3; x <= 2; x++)
+                for (int y = -3; y <= 2; y++)
                     m_PreviewTilemaps[0].SetTile(new Vector3Int(x, y, 0), tile);
-
-            for (int y = -1; y <= 1; y++)
-                m_PreviewTilemaps[1].SetTile(new Vector3Int(1, y, 0), tile);
-
-            for (int x = -2; x <= 0; x++)
-                m_PreviewTilemaps[2].SetTile(new Vector3Int(x, -2, 0), tile);
-
-            m_PreviewTilemaps[3].SetTile(new Vector3Int(1, -2, 0), tile);
         }
 
         /// <summary>
