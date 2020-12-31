@@ -73,7 +73,7 @@ namespace UnityEngine
             /// <summary>
             /// The output GameObject for this Rule.
             /// </summary>
-            public GameObject m_GameObject;
+            public GameObject[] m_GameObjects = new GameObject[1];
             /// <summary>
             /// The output minimum Animation Speed for this Rule.
             /// </summary>
@@ -387,16 +387,17 @@ namespace UnityEngine
                         case TilingRule.OutputSprite.Single:
                         case TilingRule.OutputSprite.Animation:
                             tileData.sprite = rule.m_Sprites[0];
+                            tileData.gameObject = rule.m_GameObjects[0];
                             break;
                         case TilingRule.OutputSprite.Random:
                             int index = Mathf.Clamp(Mathf.FloorToInt(GetPerlinValue(position, rule.m_PerlinScale, 100000f) * rule.m_Sprites.Length), 0, rule.m_Sprites.Length - 1);
                             tileData.sprite = rule.m_Sprites[index];
+                            tileData.gameObject = rule.m_GameObjects[index];
                             if (rule.m_RandomTransform != TilingRule.Transform.Fixed)
                                 transform = ApplyRandomTransform(rule.m_RandomTransform, transform, rule.m_PerlinScale, position);
                             break;
                     }
                     tileData.transform = transform;
-                    tileData.gameObject = rule.m_GameObject;
                     tileData.colliderType = rule.m_ColliderType;
                     break;
                 }
