@@ -91,7 +91,7 @@ namespace UnityEditor
             m_PreviewUtility.EndAndDrawPreview(rect);
         }
 
-        protected virtual void CreatePreview()
+        protected override void CreatePreview()
         {
             m_PreviewUtility = new PreviewRenderUtility(true);
             m_PreviewUtility.lights[0].transform.rotation = Quaternion.Euler(45, -45, 0);
