@@ -67,7 +67,7 @@ namespace UnityEngine
             {
                 if (RuleMatches(rule, position, tilemap, true, true))
                 {
-                    transform = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(-1f, -1f, 1f));
+                    transform = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(-1f, 1f, -1f));
                     return true;
                 }
                 if (RuleMatches(rule, position, tilemap, true, false))
@@ -77,7 +77,7 @@ namespace UnityEngine
                 }
                 if (RuleMatches(rule, position, tilemap, false, true))
                 {
-                    transform = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1f, -1f, 1f));
+                    transform = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1f, 1f, -1f));
                     return true;
                 }
             }
@@ -95,7 +95,7 @@ namespace UnityEngine
             {
                 if (RuleMatches(rule, position, tilemap, false, true))
                 {
-                    transform = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1f, -1f, 1f));
+                    transform = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(1f, 1f, -1f));
                     return true;
                 }
             }
